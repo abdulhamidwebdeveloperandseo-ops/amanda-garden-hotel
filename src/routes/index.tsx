@@ -1,128 +1,147 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
+import { Navbar } from "../components/Navbar";
+import { Hero } from "../components/Hero";
+import { AboutSection } from "../components/AboutSection";
+import { RoomsSection } from "../components/RoomsSection";
+import { FacilitiesSection } from "../components/FacilitiesSection";
+import { EventsSection } from "../components/EventsSection";
+import { LaundrySection } from "../components/LaundrySection";
+import { GallerySection } from "../components/GallerySection";
+import { PlanYourStaySection } from "../components/PlanYourStaySection";
+import { ContactSection } from "../components/ContactSection";
+import { Footer } from "../components/Footer";
+import { BookingModal } from "../components/BookingModal";
+import { HOTEL_INFO } from "../data/hotelData";
+import { MessageSquare, Phone } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Amanda Garden Hotel — Website Plan" },
-      { name: "description", content: "A simple build plan for the Amanda Garden Hotel website: pages, features, style and a ready prompt for Google AI Studio." },
-      { property: "og:title", content: "Amanda Garden Hotel — Website Plan" },
-      { property: "og:description", content: "Pages, features, style guide and a ready-to-copy AI Studio prompt." },
+      { title: "Amanda Garden Hotel | Accommodation, Pool, Dining & Events in Akwanga" },
+      {
+        name: "description",
+        content:
+          "Official website for Amanda Garden Hotel, Akwanga, Nasarawa State, Nigeria. Quality rooms from ₦10,000, swimming pool, restaurant, lounge, event hall (₦70,000), and garden venue.",
+      },
+      { property: "og:title", content: "Amanda Garden Hotel — Akwanga, Nasarawa State" },
+      {
+        property: "og:description",
+        content:
+          "Your Comfort. Your Escape. Welcoming hotel destination in Akwanga for comfortable stays, relaxation, dining, and memorable gatherings.",
+      },
+      { property: "og:image", content: "/assets/photos/P1020372_2beb1570.jpg" },
       { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
+      { name: "twitter:card", content: "summary_large_image" },
+    ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Hotel",
+          name: "Amanda Garden Hotel",
+          image: "/assets/photos/P1020372_2beb1570.jpg",
+          telephone: "+2348035900685",
+          priceRange: "₦10,000 - ₦20,000",
+          address: {
+            "@type": "PostalAddress",
+            streetAddress: "Opposite Specialist Hospital, along English Baptist Church Road",
+            addressLocality: "Akwanga",
+            addressRegion: "Nasarawa State",
+            addressCountry: "NG",
+          },
+          amenityFeature: [
+            { "@type": "LocationFeatureSpecification", name: "Swimming Pool", value: true },
+            { "@type": "LocationFeatureSpecification", name: "Restaurant", value: true },
+            { "@type": "LocationFeatureSpecification", name: "Lounge Bar", value: true },
+            { "@type": "LocationFeatureSpecification", name: "Event Hall", value: true },
+            { "@type": "LocationFeatureSpecification", name: "Garden Grounds", value: true },
+            { "@type": "LocationFeatureSpecification", name: "Laundry Service", value: true },
+          ],
+        }),
+      },
     ],
   }),
-  component: Index,
+  component: AmandaGardenHotelWebsite,
 });
 
-const pages = [
-  { name: "Home", items: ["Full-width garden hero photo with hotel name", "Short welcome message", "Book Now button", "Highlights: rooms, dining, garden, events", "Guest reviews"] },
-  { name: "Rooms & Suites", items: ["Room cards with photo, price per night, size and beds", "Amenities list (Wi-Fi, AC, TV, breakfast)", "Book this room button"] },
-  { name: "Dining", items: ["Restaurant & bar intro", "Sample menu", "Opening hours"] },
-  { name: "Facilities", items: ["Garden & lounge", "Pool / gym / spa (if available)", "Event & meeting halls", "Parking & airport pickup"] },
-  { name: "Gallery", items: ["Photo grid of rooms, garden, food and events"] },
-  { name: "Booking", items: ["Check-in / check-out dates", "Guests and room type", "Name, phone, email, special requests", "Confirmation message"] },
-  { name: "Contact", items: ["Address with map", "Phone, WhatsApp, email", "Contact form", "Social media links"] },
-];
+function AmandaGardenHotelWebsite() {
+  const [bookingModalOpen, setBookingModalOpen] = useState(false);
+  const [selectedBookingItem, setSelectedBookingItem] = useState<string>("standard-rooms");
 
-const style = [
-  ["Colors", "Deep garden green, warm cream, soft gold accents"],
-  ["Fonts", "Elegant serif for headings, clean sans-serif for text"],
-  ["Mood", "Calm, natural, welcoming, premium but friendly"],
-  ["Devices", "Mobile-first, works on phone, tablet and desktop"],
-];
+  const handleOpenBooking = (itemType?: string) => {
+    if (itemType) {
+      setSelectedBookingItem(itemType);
+    }
+    setBookingModalOpen(true);
+  };
 
-const steps = [
-  "Open Google AI Studio and start a new app (Build mode).",
-  "Paste the prompt below and generate the first version.",
-  "Check each page on phone size and ask for fixes one at a time.",
-  "Replace sample photos, prices and contact details with real ones.",
-  "Deploy and share the link.",
-];
-
-const prompt = `Build a modern, mobile-first hotel website for "Amanda Garden Hotel".
-Style: deep garden green, warm cream and soft gold; elegant serif headings with clean sans-serif body text; calm, natural and welcoming.
-Pages: Home (garden hero image, welcome text, Book Now button, highlights, reviews), Rooms & Suites (room cards with photo, price per night, amenities, book button), Dining (restaurant intro, menu, hours), Facilities (garden, lounge, events hall, parking, airport pickup), Gallery (photo grid), Booking (dates, guests, room type, contact details, confirmation message), Contact (address with map, phone, WhatsApp, email, form, social links).
-Add a sticky top menu, a footer with contact info, and smooth simple animations. Use placeholder photos I can replace later.`;
-
-function Index() {
-  const [copied, setCopied] = useState(false);
-  const copy = async () => {
-    await navigator.clipboard.writeText(prompt);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+  const handleNavigate = (sectionId: string) => {
+    const el = document.getElementById(sectionId);
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth" });
+    }
   };
 
   return (
-    <main className="min-h-screen bg-background text-foreground">
-      <header className="bg-primary px-6 py-16 text-center text-primary-foreground">
-        <p className="text-xs uppercase tracking-[0.3em] text-accent">Website Plan</p>
-        <h1 className="mt-3 font-display text-4xl sm:text-6xl">Amanda Garden Hotel</h1>
-        <p className="mx-auto mt-4 max-w-md text-sm opacity-80">
-          A simple blueprint to build the hotel website in Google AI Studio.
-        </p>
-      </header>
+    <div className="min-h-screen bg-[#FAF9F6] text-[#25282B] flex flex-col font-sans selection:bg-[#183F35] selection:text-[#FAF9F6]">
+      {/* Navigation */}
+      <Navbar onOpenBooking={handleOpenBooking} />
 
-      <div className="mx-auto max-w-3xl space-y-12 px-5 py-12">
-        <section>
-          <h2 className="font-display text-2xl text-primary">1. Goal</h2>
-          <p className="mt-3 text-muted-foreground">
-            Show the hotel's beauty, help guests explore rooms and facilities, and make booking or contacting the hotel quick and easy.
-          </p>
-        </section>
+      {/* Main Sections */}
+      <main className="flex-1">
+        {/* 1. Hero */}
+        <Hero onOpenBooking={handleOpenBooking} onNavigate={handleNavigate} />
 
-        <section>
-          <h2 className="font-display text-2xl text-primary">2. Pages</h2>
-          <div className="mt-4 grid gap-4 sm:grid-cols-2">
-            {pages.map((p, i) => (
-              <div key={p.name} className="rounded-lg border bg-card p-5">
-                <h3 className="font-display text-lg">
-                  <span className="text-accent-foreground">{String(i + 1).padStart(2, "0")}</span> {p.name}
-                </h3>
-                <ul className="mt-2 space-y-1 text-sm text-muted-foreground">
-                  {p.items.map((it) => <li key={it}>• {it}</li>)}
-                </ul>
-              </div>
-            ))}
-          </div>
-        </section>
+        {/* 2. About */}
+        <AboutSection onNavigate={handleNavigate} onOpenBooking={() => handleOpenBooking()} />
 
-        <section>
-          <h2 className="font-display text-2xl text-primary">3. Look & feel</h2>
-          <dl className="mt-4 divide-y rounded-lg border bg-card">
-            {style.map(([k, v]) => (
-              <div key={k} className="flex gap-4 p-4 text-sm">
-                <dt className="w-20 shrink-0 font-semibold">{k}</dt>
-                <dd className="text-muted-foreground">{v}</dd>
-              </div>
-            ))}
-          </dl>
-        </section>
+        {/* 3. Rooms & Accommodation */}
+        <RoomsSection onOpenBooking={handleOpenBooking} />
 
-        <section>
-          <h2 className="font-display text-2xl text-primary">4. Build steps</h2>
-          <ol className="mt-4 space-y-3">
-            {steps.map((s, i) => (
-              <li key={s} className="flex gap-3 text-sm">
-                <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground">{i + 1}</span>
-                <span className="pt-1">{s}</span>
-              </li>
-            ))}
-          </ol>
-        </section>
+        {/* 4. Facilities & Services */}
+        <FacilitiesSection onOpenBooking={handleOpenBooking} onNavigate={handleNavigate} />
 
-        <section>
-          <div className="flex items-center justify-between gap-3">
-            <h2 className="font-display text-2xl text-primary">5. AI Studio prompt</h2>
-            <button onClick={copy} className="rounded-md bg-accent px-4 py-2 text-sm font-medium text-accent-foreground">
-              {copied ? "Copied!" : "Copy"}
-            </button>
-          </div>
-          <pre className="mt-4 whitespace-pre-wrap rounded-lg border bg-muted p-5 text-sm leading-relaxed">{prompt}</pre>
-        </section>
+        {/* 5. Hall and Garden Bookings */}
+        <EventsSection onOpenBooking={handleOpenBooking} />
+
+        {/* 6. Laundry Services */}
+        <LaundrySection />
+
+        {/* 7. Real Photo Gallery */}
+        <GallerySection />
+
+        {/* 8. Plan Your Stay (Replacing unverified reviews) */}
+        <PlanYourStaySection onOpenBooking={() => handleOpenBooking()} />
+
+        {/* 9. Contact & Map */}
+        <ContactSection />
+      </main>
+
+      {/* Footer */}
+      <Footer onOpenBooking={handleOpenBooking} onNavigate={handleNavigate} />
+
+      {/* Interactive Booking Enquiry Modal */}
+      <BookingModal
+        isOpen={bookingModalOpen}
+        onClose={() => setBookingModalOpen(false)}
+        initialSelection={selectedBookingItem}
+      />
+
+      {/* Floating Action Button for WhatsApp Fast Help */}
+      <div className="fixed bottom-6 right-6 z-30 flex flex-col items-end gap-2">
+        <a
+          href={`https://wa.me/${HOTEL_INFO.whatsappNumber}?text=Hello%20Amanda%20Garden%20Hotel,%20I%20would%20like%20to%20make%20an%20enquiry.`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center gap-2 bg-[#25D366] hover:bg-[#20BA5A] text-white px-4 py-3 rounded-full shadow-lg transition-transform hover:scale-105 active:scale-95 text-xs font-semibold"
+          title="Direct WhatsApp with Amanda Garden Hotel"
+        >
+          <MessageSquare className="w-5 h-5" />
+          <span className="hidden sm:inline">WhatsApp Front Desk</span>
+        </a>
       </div>
-
-      <footer className="border-t py-6 text-center text-xs text-muted-foreground">Amanda Garden Hotel · Website Plan</footer>
-    </main>
+    </div>
   );
 }

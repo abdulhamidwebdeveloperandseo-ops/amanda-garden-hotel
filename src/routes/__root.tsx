@@ -78,21 +78,41 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Amanda Garden Hotel" },
-      { name: "description", content: "Website plan for Amanda Garden Hotel" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Amanda Garden Hotel" },
-      { property: "og:description", content: "Website plan for Amanda Garden Hotel" },
+      { title: "Amanda Garden Hotel | Akwanga, Nasarawa State, Nigeria" },
+      {
+        name: "description",
+        content:
+          "Welcome to Amanda Garden Hotel in Akwanga, Nasarawa State. Comfortable rooms from ₦10,000, outdoor swimming pool, restaurant, executive lounge, event hall, and garden venue.",
+      },
+      { property: "og:title", content: "Amanda Garden Hotel — Akwanga, Nasarawa State" },
+      {
+        property: "og:description",
+        content:
+          "Comfortable guest accommodation, swimming pool, dining restaurant, lounge, and private event bookings in Akwanga, Nigeria.",
+      },
+      { property: "og:image", content: "/assets/photos/P1020372_2beb1570.jpg" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: "@Lovable" },
+      { name: "theme-color", content: "#183F35" },
     ],
     links: [
       {
         rel: "stylesheet",
         href: appCss,
       },
-      { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Karla:wght@400;600&display=swap" },
+      {
+        rel: "preconnect",
+        href: "https://fonts.googleapis.com",
+      },
+      {
+        rel: "preconnect",
+        href: "https://fonts.gstatic.com",
+        crossOrigin: "anonymous",
+      },
+      {
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Karla:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap",
+      },
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
     ],
   }),
@@ -104,11 +124,16 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `try{var _f=window.fetch;if(typeof _f==="function"){Object.defineProperty(window,"fetch",{value:_f,writable:true,configurable:true,enumerable:true});}}catch(e){}`,
+          }}
+        />
         <HeadContent />
       </head>
-      <body>
+      <body suppressHydrationWarning>
         {children}
         <Scripts />
       </body>
