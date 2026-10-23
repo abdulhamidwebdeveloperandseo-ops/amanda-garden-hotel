@@ -128,7 +128,7 @@ function RootShell({ children }: { children: ReactNode }) {
       <head>
         <script
           dangerouslySetInnerHTML={{
-            __html: `try{var _f=window.fetch;if(typeof _f==="function"){Object.defineProperty(window,"fetch",{value:_f,writable:true,configurable:true,enumerable:true});}}catch(e){}`,
+            __html: `(function(){try{var _orig=window.fetch;var _cur=_orig;function _makeWritable(target){if(!target)return;try{Object.defineProperty(target,"fetch",{get:function(){return _cur;},set:function(v){_cur=v;},configurable:true,enumerable:true});}catch(err){try{target.fetch=_cur;}catch(_){}}}_makeWritable(window);if(typeof Window!=="undefined"&&Window.prototype){_makeWritable(Window.prototype);}window.addEventListener("error",function(e){if((e.filename&&e.filename.indexOf("chrome-extension://")!==-1)||(e.error&&e.error.stack&&e.error.stack.indexOf("chrome-extension://")!==-1)||(e.message&&e.message.indexOf("fetch")!==-1&&e.message.indexOf("getter")!==-1)){if(e.preventDefault)e.preventDefault();if(e.stopImmediatePropagation)e.stopImmediatePropagation();}},true);}catch(e){}})();`,
           }}
         />
         <HeadContent />

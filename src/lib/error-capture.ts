@@ -63,10 +63,28 @@ console.error = (...args: unknown[]) => {
 };
 
 if (typeof globalThis.addEventListener === "function") {
-  globalThis.addEventListener("error", (event) => record((event as ErrorEvent).error ?? event));
-  globalThis.addEventListener("unhandledrejection", (event) =>
-    record((event as PromiseRejectionEvent).reason),
-  );
+  globalThis.addEventListener("error", (event) => {
+    const err = (event as ErrorEvent).error ?? event;
+    const filename = (event as ErrorEvent).filename ?? "";
+    const stack = (err as Error)?.stack ?? "";
+    const message = (err as Error)?.message ?? String(err);
+    if (
+      filename.includes("chrome-extension://") ||
+      stack.includes("chrome-extension://") ||
+      (message.includes("fetch") && message.includes("getter"))
+    ) {
+      return;
+    }
+    record(err);
+  });
+  globalThis.addEventListener("unhandledrejection", (event) => {
+    const reason = (event as PromiseRejectionEvent).reason;
+    const stack = (reason as Error)?.stack ?? "";
+    if (stack.includes("chrome-extension://")) {
+      return;
+    }
+    record(reason);
+  });
 }
 
 export function consumeLastCapturedError(): unknown {

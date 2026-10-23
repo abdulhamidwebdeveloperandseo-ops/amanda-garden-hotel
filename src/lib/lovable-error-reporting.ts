@@ -26,6 +26,14 @@ declare global {
 
 export function reportLovableError(error: unknown, context: Record<string, unknown> = {}) {
   if (typeof window === "undefined") return;
+  const stack = error instanceof Error ? error.stack : undefined;
+  const message = describeThrown(error);
+  if (
+    stack?.includes("chrome-extension://") ||
+    (message.includes("fetch") && message.includes("getter"))
+  ) {
+    return;
+  }
   window.__lovableEvents?.captureException?.(
     error,
     {
@@ -42,9 +50,8 @@ export function reportLovableError(error: unknown, context: Record<string, unkno
   // Prod React does not rethrow boundary-caught errors to window.onerror, so the
   // editor's telemetry never sees them. Forward to lovable.js's reporting hook,
   // which is present only inside the editor preview.
-  const stack = error instanceof Error ? error.stack : undefined;
   window.__lovableReportRuntimeError?.({
-    message: describeThrown(error),
+    message,
     ...(stack !== undefined && { stack }),
     filename: window.location.pathname,
   });
